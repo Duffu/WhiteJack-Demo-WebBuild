@@ -117,6 +117,26 @@
           transform: rotate(360deg);
         }
       }
+      #startScreen {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        z-index: 9999;
+      }
+      #startButton {
+        padding: 12px 28px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        background: #4caf50;
+        color: white;
+      }
     </style>
   </head>
 
@@ -124,6 +144,10 @@
     <header>
       <h1>WhiteJack</h1>
     </header>
+    <div id="startScreen">
+      <h2>Click to Start</h2>
+      <button id="startButton">Start Game</button>
+    </div>
 
     <div id="game-container">
       <div id="toolbar">
@@ -204,7 +228,21 @@
         spinnerElement.style.display = "none";
       };
     </script>
-
+    <script>
+      document.getElementById("startButton").onclick = () => {
+        document.getElementById("startScreen").remove();
+        try {
+          if (typeof Module !== "undefined" && Module.ctx) {
+            Module.ctx.resume();
+          } else if (typeof AudioContext !== "undefined") {
+            const ctx = new AudioContext();
+            ctx.resume();
+          }
+        } catch (e) {
+          console.warn("Audio context resume failed:", e);
+        }
+      };
+    </script>
     <script async src="WhiteJack.js"></script>
   </body>
 </html>
